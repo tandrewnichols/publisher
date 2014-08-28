@@ -10,7 +10,7 @@ module.exports = function() {
   require('grunt-simple-git/tasks/git')(grunt);
   require('grunt-contrib-copy/tasks/copy')(grunt);
   require('grunt-mocha-cov/tasks/mochacov')(grunt);
-  console.log(blog);
+
   grunt.initConfig({
     mochacov: {
       html: {
@@ -54,6 +54,10 @@ module.exports = function() {
         cmd: 'checkout @{-1}'
       },
       apply: {
+        options: {
+          force: true,
+          stdio: false
+        },
         cmd: 'stash apply stash^{/grunt-auto-stash}'
       }
     },
@@ -68,9 +72,7 @@ module.exports = function() {
     }
   });
 
-  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:origin', 'git:heroku', 'git:previous'], { gruntfile: false }, function() {
-    grunt.tasks(['git:apply'], { gruntfile: false, force: true }, function() {
-      grunt.log.ok(repo + ' README and coverage.html copied to blog/pages/modules/' + publisher + ' and deployed.');
-    });
+  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:origin', 'git:heroku', 'git:previous', 'git:apply'], { gruntfile: false }, function() {
+    grunt.log.ok(repo + ' README and coverage.html copied to blog/pages/modules/' + publisher + ' and deployed.');
   });
 };
