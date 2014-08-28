@@ -7,10 +7,10 @@ var publisher = parts[0] === 'manta' ? 'mantacode' : 'tandrewnichols'
 var repo = publisher === 'mantacode' ? parts[1] : parts[0];
 
 module.exports = function() {
-  grunt.loadNpmTasks('grunt-simple-git');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-mocha-cov');
-
+  require('grunt-simple-git/tasks/git')(grunt);
+  require('grunt-contrib-copy/tasks/copy')(grunt);
+  require('grunt-mocha-cov/tasks/mochacov')(grunt);
+  console.log(blog);
   grunt.initConfig({
     mochacov: {
       html: {
@@ -25,47 +25,35 @@ module.exports = function() {
     },
 
     git: {
-      blog: {
-        options: {
-          cwd: blog
-        },
+      options: {
+        cwd: blog
+      },
+      origin: {
         cmd: 'push origin master'
       },
       heroku: {
-        options: {
-          cwd: blog
-        },
         cmd: 'push heroku master'
+      },
+      add: {
+        options: {
+          all: true
+        }
       },
       commit: {
         options: {
-          a: true,
-          message: 'Copied new documenation and coverage from ' + name,
-          cwd: blog
+          message: 'Copied new documenation and coverage from ' + repo
         }
       },
       save: {
-        options: {
-          cwd: blog
-        },
         cmd: 'stash save grunt-auto-stash' 
       },
       master: {
-        options: {
-          cwd: blog
-        },
         cmd: 'checkout master'
       },
-      previous; {
-        options: {
-          cwd: blog
-        },
+      previous: {
         cmd: 'checkout @{-1}'
       },
       apply: {
-        options: {
-          cwd: blog
-        },
         cmd: 'stash apply stash^{/grunt-auto-stash}'
       }
     },
@@ -73,15 +61,15 @@ module.exports = function() {
     copy: {
       all: {
         files: [
-          { expand: true, flatten: true, src: ['README.md'], dest: blog + '/pages/modules/' + publisher + '/', rename: function(dest, src) { return dest + name + '.md'; } }
-          { expand: true, flatten: true, src: ['coverage/coverage.html'], dest: blog + '/pages/coverage/' + publisher + '/', rename: function(dest, src) { return dest + name + '.html'; } }
+          { expand: true, flatten: true, src: ['README.md'], dest: blog + '/pages/modules/' + publisher + '/', rename: function(dest, src) { return dest + '/' + repo + '.md'; } },
+          { expand: true, flatten: true, src: ['coverage/coverage.html'], dest: blog + '/pages/coverage/' + publisher + '/', rename: function(dest, src) { return dest + '/' + repo + '.html'; } }
         ]
       }
     }
   });
 
-  grunt.tasks(['mochacov:html', 'git:origin', 'git:push', 'npm:publish', 'git:save', 'git:master', 'copy:all', 'git:commit', 'git:blog', 'git:heroku', 'git:previous'], { gruntfile: false }, function() {
-    grunt.tasks(['git:apply'], { force: true }, function() {
+  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:origin', 'git:heroku', 'git:previous'], { gruntfile: false }, function() {
+    grunt.tasks(['git:apply'], { gruntfile: false, force: true }, function() {
       grunt.log.ok(repo + ' README and coverage.html copied to blog/pages/modules/' + publisher + ' and deployed.');
     });
   });
