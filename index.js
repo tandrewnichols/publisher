@@ -17,7 +17,7 @@ program
   .action(function(options) {
     var pkg = require(process.cwd() + '/package');
     pkg.scripts = pkg.scripts || {};
-    pkg.scripts.publish = "publisher run";
+    pkg.scripts.publish = "if [[ $USER == anichols ]]; then publisher run; fi";
     fs.writeFile(process.cwd() + '/package.json', JSON.stringify(pkg, null, 2), function() {
       console.log(chalk.green('Added "publish" script to package.json'));
     });
