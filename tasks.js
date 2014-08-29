@@ -73,6 +73,6 @@ module.exports = function() {
   });
 
   grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:origin', 'git:heroku', 'git:previous', 'git:apply'], { gruntfile: false }, function() {
-    grunt.log.ok(repo + ' README and coverage.html copied to blog/pages/modules/' + publisher + ' and deployed.');
+    grunt.log.ok(repo + ' README.md and coverage.html copied to blog and deployed.');
   });
 };
