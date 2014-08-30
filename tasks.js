@@ -65,8 +65,8 @@ module.exports = function() {
     copy: {
       all: {
         files: [
-          { expand: true, flatten: true, src: ['README.md'], dest: blog + '/pages/modules/' + publisher + '/', rename: function(dest, src) { return dest + '/' + repo + '.md'; } },
-          { expand: true, flatten: true, src: ['coverage/coverage.html'], dest: blog + '/pages/coverage/' + publisher + '/', rename: function(dest, src) { return dest + '/' + repo + '.html'; } }
+          { expand: true, flatten: true, src: ['README.md'], dest: blog + '/modules/' + publisher + '/', rename: function(dest, src) { return dest + '/' + repo + '.md'; } },
+          { expand: true, flatten: true, src: ['coverage/coverage.html'], dest: blog + '/coverage/' + publisher + '/', rename: function(dest, src) { return dest + '/' + repo + '.html'; } }
         ]
       }
     }
