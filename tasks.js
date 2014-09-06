@@ -28,11 +28,17 @@ module.exports = function() {
       options: {
         cwd: blog
       },
-      origin: {
+      pushorigin: {
         cmd: 'push origin master'
       },
-      heroku: {
+      pushheroku: {
         cmd: 'push heroku master'
+      },
+      pullorigin: {
+        cmd: 'pull origin master'
+      },
+      pullheroku: {
+        cmd: 'pull heroku master'
       },
       add: {
         options: {
@@ -72,7 +78,7 @@ module.exports = function() {
     }
   });
 
-  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:origin', 'git:heroku', 'git:previous', 'git:apply'], { gruntfile: false }, function() {
+  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:pullorigin', 'git:pushorigin', 'git:pullheroku', 'git:pushheroku', 'git:previous', 'git:apply'], { gruntfile: false }, function() {
     grunt.log.ok(repo + ' README.md and coverage.html copied to blog and deployed.');
   });
 };
