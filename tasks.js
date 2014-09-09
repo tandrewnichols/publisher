@@ -13,7 +13,6 @@ module.exports = function() {
   require('grunt-contrib-copy/tasks/copy')(grunt);
   require('grunt-mocha-cov/tasks/mochacov')(grunt);
   require('./tasks/manifest')(grunt, blog, root, publisher, repo)
-  grunt.loadTasks('tasks');
 
   grunt.initConfig({
     mochacov: {
