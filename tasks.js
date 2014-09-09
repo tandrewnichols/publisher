@@ -7,9 +7,13 @@ var publisher = parts[0] === 'manta' ? 'mantacode' : 'tandrewnichols'
 var repo = publisher === 'mantacode' ? parts[1] : parts[0];
 
 module.exports = function() {
+  // Can't use loadNpmTasks, because that will load them from
+  // the target repo (cwd)
   require('grunt-simple-git/tasks/git')(grunt);
   require('grunt-contrib-copy/tasks/copy')(grunt);
   require('grunt-mocha-cov/tasks/mochacov')(grunt);
+  require('./tasks/manifest')(grunt, blog, root, publisher, repo)
+  grunt.loadTasks('tasks');
 
   grunt.initConfig({
     mochacov: {
@@ -78,7 +82,7 @@ module.exports = function() {
     }
   });
 
-  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'git:add', 'git:commit', 'git:pullorigin', 'git:pushorigin', 'git:pullheroku', 'git:pushheroku', 'git:previous', 'git:apply'], { gruntfile: false }, function() {
+  grunt.tasks(['mochacov:html', 'git:save', 'git:master', 'copy:all', 'manifest', 'git:add', 'git:commit', 'git:pullorigin', 'git:pushorigin', 'git:pullheroku', 'git:pushheroku', 'git:previous', 'git:apply'], { gruntfile: false }, function() {
     grunt.log.ok(repo + ' README.md and coverage.html copied to blog and deployed.');
   });
 };
